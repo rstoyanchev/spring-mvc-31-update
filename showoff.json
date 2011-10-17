@@ -1,0 +1,16 @@
+{
+  "name": "Spring MVC 3.1 Update",
+  "description": "An Overview of New Features and Improvements in Spring MVC 3.1",
+  "sections": [
+    {"section":"intro"},
+    {"section":"config"},
+    {"section":"infrastructure"},
+    {"section":"consumes-produces"},
+    {"section":"uri-variables"},
+    {"section":"redirect"},
+    {"section":"uri-components-builder"},
+    {"section":"multipart-requests"},
+    {"section":"end"}
+  ]
+}
+
