@@ -48,9 +48,10 @@
 !SLIDE code
 # Demo 
 
-https://github.com/rstoyanchev/spring-mvc-31-demo
+<a href="https://github.com/rstoyanchev/spring-mvc-31-demo">https://github.com/rstoyanchev/spring-mvc-31-demo</a>
 
-`org.springframework.samples.mvc31.crudcontroller`
+__See package:__<br>
+<a href="https://github.com/rstoyanchev/spring-mvc-31-demo/tree/master/src/main/java/org/springframework/samples/mvc31/crudcontroller">`org.springframework.samples.mvc31.crudcontroller`</a>
 
 
 !SLIDE incremental
@@ -75,7 +76,7 @@ https://github.com/rstoyanchev/spring-mvc-31-demo
     public String editForm(@PathVariable String slug){
 
         // No need to add "slug" to the model
-        // Will be available for rendering
+        // It will be merged in the model
 
     }
 

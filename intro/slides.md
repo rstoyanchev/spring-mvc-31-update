@@ -1,19 +1,17 @@
-!SLIDE 
+!SLIDE subsection
 
-# Spring MVC 3.1 Update #
+# __Spring MVC 3.1 Update__
 
-!SLIDE bullets incremental
+## Rossen Stoyanchev
+### _SpringSource, VMware_
 
-# About This Presentation #
 
-* first point
-* second point
-* third point
+!SLIDE subsection incremental
 
-!SLIDE bullets incremental
+# About The Speaker #
 
-# About Me #
-
-* first point
-* second point
-* third point
+* Staff Engineer SpringSource, VMware
+* Spring MVC, Spring Web Flow committer
+* Teach and consult, Spring Projects
+* Spring Web course author
+* NYC area

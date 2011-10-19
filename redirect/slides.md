@@ -39,13 +39,13 @@
 ## (Up until Spring 3.1)
 
 * Depends on the content of the model
-* Simple type attributes auto-appended
-* May cause some surprises
+* Simple type attrs appended to query
+* May lead to surprises
 
 .notes Example surprises ROO-2158, SPR-6796
 
 !SLIDE smaller
-# What Usually Makes Sense
+# What Usually Makes Sense ...
 
     @@@ java
 
@@ -53,14 +53,15 @@
     public String save(Foo foo, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
-          // Re-render form using "default" model
+          // Re-render using "default" model
           return "edit";
         }
 
-        // Clear the model content!
+        // 1. Clear the model content!
+
         model.asMap().clear()
 
-        // Add attributes for redirect
+        // 2. Add attributes for redirect
 
         return "redirect:/action";
     }
@@ -93,16 +94,16 @@
 
 * Used __only if__ controller redirects
 * Initially empty
-* Formats attributes with DataBinder
-* All attributes for use in redirect URL
-* As URI vars or query params
+* Attributes formatted with DataBinder
+* Intended for use in redirect URL
+* ... i.e. as URI vars or query params
 
 !SLIDE incremental
 # Flash Attributes
 
 * Another kind of redirect attributes
-* Without impact on the URL
-* Attributes stored in the session
+* But without impact on the URL
+* Temporily stored in the session
 * Removed immediately after the redirect
 
 !SLIDE smaller
@@ -129,9 +130,9 @@
 !SLIDE code
 # Demo 
 
-https://github.com/SpringSource/spring-mvc-showcase
+<a href="https://github.com/SpringSource/spring-mvc-showcase">https://github.com/SpringSource/spring-mvc-showcase</a>
 
-`FormController.java`
+<a href="https://github.com/SpringSource/spring-mvc-showcase/blob/master/src/main/java/org/springframework/samples/mvc/form/FormController.java">__`FormController.java`__</a>
 
 
 !SLIDE incremental
@@ -143,7 +144,7 @@ https://github.com/SpringSource/spring-mvc-showcase
 * Or access `FlashMap` directly elsewhere
 
 !SLIDE small
-# Access To FlashMap
+# Direct Access To FlashMap
 
     @@@ java
 

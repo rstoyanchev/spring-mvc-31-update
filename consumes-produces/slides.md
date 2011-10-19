@@ -48,17 +48,15 @@
 * Aligned with JAX-RS
 * `produces` influences actual content type used
 * Possible to request more general media type
-  * For example requests for <br>
-    `"text/*"`, `"*/*"` 
-    match to `@RequestMapping(produces = "text/plain"`)
+* For example request for `"text/*"` or `"*/*"`
+matches to `@RequestMapping(produces = "text/plain"`)
 
 !SLIDE code
 # Demo
 
-https://github.com/SpringSource/spring-mvc-showcase
+<a href="https://github.com/SpringSource/spring-mvc-showcase">https://github.com/SpringSource/spring-mvc-showcase</a>
 
-`MappingController.java`
-
-`ResponseController.java`
+<a href="https://github.com/SpringSource/spring-mvc-showcase/blob/master/src/main/java/org/springframework/samples/mvc/mapping/MappingController.java">`MappingController.java`</a><br>
+<a href="https://github.com/SpringSource/spring-mvc-showcase/blob/master/src/main/java/org/springframework/samples/mvc/response/ResponseController.java">`ResponseController.java`</a>
 
 

@@ -15,11 +15,11 @@
 
 * Introduced in Spring 2.5
 * Expanded for REST in 3.0
-* Superceded controller class hierarchy
+* Replaced controller class hierarchy
 * Overall __very__ successful
 
 !SLIDE incremental
-# Support Classes
+# @MVC Support Classes
 
 * Gradually evolved
 * Not very customizable
@@ -28,23 +28,28 @@
 
 .notes Duplicated handler method selection, can't split HTTP methods across controllers, etc.
 
-!SLIDE small incremental
-# New @MVC Support Classes
+!SLIDE incremental
+# New, Spring 3.1
+# @MVC Support Classes
 
 * `RequestMappingHandlerMapping`
 * `RequestMappingHandlerAdapter`
 * `ExceptionHandlerExceptionResolver`
 
-!SLIDE incremental small
-# Configuring the 
-# New Support Classes
-
-* Enabled by default from the MVC Java config and namespace
-* Old classes still available but no new features
-
 !SLIDE center
 
 ![support-classes.png](support-classes.png)
+
+!SLIDE incremental
+# @MVC Configuration
+
+* __New__ support classes "on"
+* ... if using MVC namespace, Java config
+* __Old__ support classes still the default
+* ... if not using namespace or Java config
+* ... no support for new features
+
+.notes Use of namespace is by choice and represents the recommended configuration
 
 !SLIDE center
 
@@ -69,8 +74,7 @@
 !SLIDE code
 # Demo 
 
-
-https://github.com/rstoyanchev/spring-mvc-31-demo
+<a href="https://github.com/rstoyanchev/spring-mvc-31-demo">https://github.com/rstoyanchev/spring-mvc-31-demo</a>
 
 
 

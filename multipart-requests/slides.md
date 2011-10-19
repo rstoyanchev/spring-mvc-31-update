@@ -15,7 +15,7 @@
 # Request Parsing
 
 * `StandardServletMultipartResolver`
-* Use of resolver is optional
+* Use of above resolver is optional
 * Required only if using `MultipartFile`
 * May use `javax.servlet.http.Part` instead
 
@@ -25,17 +25,21 @@
     @@@ java
 
 	@RequestMapping(method = RequestMethod.POST)
-	public void create(@RequestParam("file") MultipartFile file){
+	public void create(
+            @RequestParam("file") MultipartFile file){
 
         InputStream in = file.getInputStream();
+
         // ...
 	}
 
 
 	@RequestMapping(method = RequestMethod.POST)
-	public void create(@RequestParam("file") Part part){
+	public void create(
+            @RequestParam("file") Part part){
 
         InputStream in = part.getInputStream();
+
         // ...
 	}
     
@@ -67,8 +71,7 @@
     ... File Data ...
 
 !SLIDE smaller
-# `@RequestPart`
-# Example
+# Example: `@RequestPart`
 
     @@@ java
 
@@ -84,5 +87,13 @@
        // ...
 
     } 
+
+!SLIDE incremental small
+# `@Valid`
+
+* Supported on `@RequestBody` and `@RequestPart` args
+* ... `MethodArgumentNotValidException` on errors
+* Handled by `DefaultHandlerExceptionResolver`
+* ... `SC_BAD_REQUEST` (`400`) response  code
 
 

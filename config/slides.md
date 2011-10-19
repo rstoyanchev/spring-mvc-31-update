@@ -19,39 +19,40 @@
 
 .notes A concise way to register: Interceptors, Converters, Formatters, Resource handling, View controllers, and more...
 
-!SLIDE smaller
+!SLIDE
 # Example
 
 	@@@ xml
 
-    <annotation-driven />
+      <mvc:annotation-driven />
 
+      <mvc:interceptors>
+	      <ref bean="log4jInterceptor"/>
+      </mvc:interceptors>
 
-	<mvc:interceptors>
-		<ref bean="log4jInterceptor"/>
-	</mvc:interceptors>
+      <mvc:resources mapping="/resources/**" 
+            location="/resources/" />
 
-
-    <resources mapping="/resources/**" location="/resources/" />
-
-
-    <mvc:default-servlet-handler />    
+      <mvc:default-servlet-handler />    
 
 !SLIDE incremental
-# Namespace Challenges
+# Ease-of-Use vs Control:
+# MVC Namespace
 .notes Ask how many people use the namespace? Probably under 50% ...
 
-* Black box
-* All or nothing proposition
-* How do I customize bean property "xyz" ?
+* How do I see actual configuration?
+* How do I change bean property ... ?
+* No transparency
+* No path from simple to advanced
 
 !SLIDE incremental
-# MVC Java Config
+# Spring MVC Java Config
+## (Spring 3.1)
 
-* Code-based alternative
+* Code-based alternative to namespace
 * Not a one-for-one "translation"
-* Matches the benefits of the namespace
-* Addresses the shortcomings
+* Match the benefits of the namespace
+* Address the shortcomings
 
 !SLIDE smaller
 # Basic MVC Java Config
@@ -59,52 +60,56 @@
 
 	@@@ java
 
-    @Configuration
     @EnableWebMvc
+    @Configuration
     public class WebConfig extends WebMvcConfigurerAdapter {
 
       @Override
-	  public void addFormatters(FormatterRegistry registry){
+	  public void addFormatters(FormatterRegistry reg){
           // ...
 	  }
 
 	  @Override
-	  public void addInterceptors(InterceptorRegistry registry){
-          // ...
+	  public void addInterceptors(InterceptorRegistry reg){
+          // Equivalent to <mvc:interceptors>
 	  }
+
+      // Override more base class methods as needed...
 
     }
 
 !SLIDE smaller
-# Plugging Java config via web.xml
+# Load Java config from web.xml
 
 	@@@ xml
 
-    <context-param>
+      <!-- Detect @Configuration classes in a package -->
+
+      <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>org.example.somepackage</param-value>
+      </context-param>
+
+      <!-- Use ApplicationContext for Java config -->
+
+      <context-param>
         <param-name>contextClass</param-name>
         <param-value>
             org.springframework.web.context.support.
-             AnnotationConfigWebApplicationContext
+              AnnotationConfigWebApplicationContext
         </param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
-            org.springframework.samples.mvc31.config
-        </param-value>
-    </context-param>
+      </context-param>
 
 !SLIDE incremental
 # Why MVC Java Config?
 
-* Convenient chained-method API
-* IDE shortcuts, Javadoc, etc.
-* Transparent
-* Advanced customizations possible
+* Higher level configuration API
+* Like MVC namespace
+* But much easier to see underlying config
+* A path from simple to advanced
 
 !SLIDE smaller
-# Advanced Customizations
+# Advanced Customization Example
 
 	@@@ java
 
@@ -112,13 +117,14 @@
     public class WebConfig extends WebMvcConfigurationSupport {
 
       @Override
-	  public void addFormatters(FormatterRegistry registry){
-          // ...
-	  }
+      public void addInterceptors(InterceptorRegistry reg){
+        // Equivalent to <mvc:interceptors>
+      }
 
       @Override
+      @Bean
       public RequestMappingHandlerAdapter 
-                  requestMappingHandlerAdapter() {
+                    requestMappingHandlerAdapter() {
 
           // Create or let "super" create and customize 
           // RequestMappingHandlerAdapter ...
@@ -129,12 +135,22 @@
 !SLIDE code
 # Demo 
 
-
-__Basic config:__<br>
-https://github.com/SpringSource/greenhouse
+<a href="https://github.com/SpringSource/greenhouse">__https://github.com/SpringSource/greenhouse__</a><br>
+_See package:_
+<a href="https://github.com/SpringSource/greenhouse/tree/master/src/main/java/com/springsource/greenhouse/config">com.springsource.greenhouse.config</a>
  
-__Advanced customizations:__<br>
-https://github.com/rstoyanchev/spring-mvc-31-demo
+<a href="https://github.com/rstoyanchev/spring-mvc-31-demo">__https://github.com/rstoyanchev/spring-mvc-31-demo__</a><br>
+_See package:_
+<a href="https://github.com/rstoyanchev/spring-mvc-31-demo/tree/master/src/main/java/org/springframework/samples/mvc31/config">org.springframework.samples.mvc31.config</a>
+
+!SLIDE
+## For more on 
+## __Spring MVC Java Config__
+## attend this session:
+<br><br><br>
+## <a href="http://www.springone2gx.com/conference/chicago/2011/10/session?id=24006">__Configuration Enhancements in Spring 3.1__</a>
+
+Wednesday, 12:45
 
 
 
