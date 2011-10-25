@@ -10,6 +10,7 @@
     {"section":"redirect"},
     {"section":"uri-components-builder"},
     {"section":"multipart-requests"},
+    {"section":"hdiv"},
     {"section":"end"}
   ]
 }

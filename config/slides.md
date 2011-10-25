@@ -1,6 +1,6 @@
 
 !SLIDE subsection
-# MVC Java Config
+# Java Config
 
 !SLIDE incremental bullets
 # Spring MVC

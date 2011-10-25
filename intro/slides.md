@@ -5,14 +5,14 @@
 ## Rossen Stoyanchev
 ### _SpringSource, VMware_
 
-!SLIDE subsection smaller bullets
-# Topics
+!SLIDE smaller bullets
 
 * Java Config
-* @MVC Infrastructure
+* New @MVC Infrastructure
 * Consumes/Produces
-* URI Vars
+* URI Variables
 * Redirect & Flash Attributes
-* URI Building
-* Multipart Requests
+* UriComponentsBuilder
+* Multipart Request Support
+* HDIV Integration
 
