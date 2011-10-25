@@ -1,113 +1,297 @@
 
-!SLIDE subsection bullets smaller
-# Agenda
+!SLIDE subsection
+# Redirect Attributes
 
-* Code-based Config
-* @MVC Support Classes
-* Consumes & Produces
-* URI Variables
-* __Redirect Scenarios__
-* UriComponentsBuilder
-* Multipart Requests
+!SLIDE incremental bullets
+# `"redirect:"` & The Model
+
+* Redirect string can be URI template
+* Expanded from model attrs
+* Remaining attrs appended to query
+* But only if they're simple type
+* .. works but may lead to surprises
+
+.notes Example surprises ROO-2158, SPR-6796
 
 !SLIDE small
 # What will the redirect URL be?
 
     @@@ java
 
+
     @Controller
-    @SessionAttributes("foo")
+    public class SomeController {
+
+
+
+
+
+
+        @RequestMapping("/path")
+        public String save(Model model) {
+            // ...
+            return "redirect:/action";
+        }
+    }
+
+!SLIDE small
+# What will the redirect URL be?
+
+    @@@ java
+
+
+    @Controller
     public class SomeController {
 
         @ModelAttribute
         public void populate(Model model) {
 
-            // ...
         }
 
         @RequestMapping("/path")
         public String save(Model model) {
-
             // ...
-
             return "redirect:/action";
         }
     }
 
-!SLIDE incremental
-# Answer:
-## (Up until Spring 3.1)
+!SLIDE small
+# What will the redirect URL be?
 
-* Depends on the content of the model
-* Simple type attrs appended to query
-* May lead to surprises
+    @@@ java
 
-.notes Example surprises ROO-2158, SPR-6796
 
-!SLIDE smaller
+    @Controller
+    public class SomeController {
+
+        @ModelAttribute
+        public void populate(Model model) {
+            model.addAttribute(..);
+        }
+
+        @RequestMapping("/path")
+        public String save(Model model) {
+            // ...
+            return "redirect:/action";
+        }
+    }
+
+!SLIDE small
+# What will the redirect URL be?
+
+    @@@ java
+
+    @SessionAttributes(..)
+    @Controller
+    public class SomeController {
+
+        @ModelAttribute
+        public void populate(Model model) {
+            model.addAttribute(..);
+        }
+
+        @RequestMapping("/path")
+        public String save(Model model) {
+            // ...
+            return "redirect:/action";
+        }
+    }
+
+!SLIDE small
 # What Usually Makes Sense ...
 
     @@@ java
 
     @RequestMapping("/path")
-    public String save(Foo foo, Errors errors, Model model) {
+    public String save(Foo foo, Errors errors, 
+                       Model model) {
 
         if (errors.hasErrors()) {
-          // Re-render using "default" model
           return "edit";
         }
 
-        // 1. Clear the model content!
 
-        model.asMap().clear()
 
-        // 2. Add attributes for redirect
+
+
+
+
 
         return "redirect:/action";
     }
 
+!SLIDE small
+# What Usually Makes Sense ...
+
+    @@@ java
+
+    @RequestMapping("/path")
+    public String save(Foo foo, Errors errors, 
+                       Model model) {
+
+        if (errors.hasErrors()) {
+          return "edit";
+        }
+
+        // Clear the model for redirect scenario
+        model.asMap().clear()
+
+
+
+
+
+        return "redirect:/action";
+    }
+
+!SLIDE small
+# What Usually Makes Sense ...
+
+    @@@ java
+
+    @RequestMapping("/path")
+    public String save(Foo foo, Errors errors, 
+                       Model model) {
+
+        if (errors.hasErrors()) {
+          return "edit";
+        }
+
+        // Clear the model for redirect scenario
+        model.asMap().clear()
+
+        // Add attributes for redirect
+        model.addAttribute("foo", foo.getId());
+        model.addAttribute("queryParam", "value");
+
+        return "redirect:/action/{foo}";
+    }
+
+!SLIDE incremental bullets 
+# `RedirectAttributes`
+
+* A new method argument type
+* Used to select attrs for redirect scenario
+* Initially empty
+* Used if controller redirects.. instead of model
+
 !SLIDE smaller
-# Spring 3.1 Redirect Example
+# Example
 
     @@@ java
 
         @RequestMapping("/path")
-        public String save(Entity entity, Errors errors, 
+        public String save(Foo foo, Errors errors, 
                            RedirectAttributes redirectAttrs){
 
           if (errors.hasErrors()) {
-            // Re-render form using "default" model
             return "edit"; 
           }
 
-          // ...
-
-          redirectAttrs.addAttribute("id", 123);
-          redirectAttrs.addAttribute("date", new Date());
+          redirectAttrs.addAttribute("id", foo.getId);
+          redirectAttrs.addAttribute("queryParam", "value");
 
           return "redirect:/action/{id}";
 
         }
 
-!SLIDE incremental
-# `RedirectAttributes`
+!SLIDE incremental bullets
+# Attribute Formatting
 
-* Used __only if__ controller redirects
-* Initially empty
-* Attributes formatted with DataBinder
-* Intended for use in redirect URL
-* ... i.e. as URI vars or query params
+* `RedirectAttributes` formats added values with a `DataBinder`
+* Makes them eligible for use in the URL
+* Recall only simple type attributes appended to query
+
+!SLIDE smaller
+# Example
+
+    @@@ java
+
+        @RequestMapping("/path")
+        public String save(Foo foo, Errors errors, 
+                           RedirectAttributes redirectAttrs){
+
+
+
+
+          redirectAttrs.addAttribute("date", new Date());
+
+          return "redirect:/action";
+
+        }
+
+!SLIDE smaller transition=fade
+# Example
+
+    @@@ java
+
+        @RequestMapping("/path")
+        public String save(Foo foo, Errors errors, 
+                           RedirectAttributes redirectAttrs){
+
+          // "date" is formatted
+          // RedirectView will append it as query param
+
+          redirectAttrs.addAttribute("date", new Date());
+
+          return "redirect:/action";
+
+        }
+
+!SLIDE incremental bullets
+# Using `Model` and `RedirectAttributes`
+* Both can be used.. in one method
+
+!SLIDE smaller
+# Example
+
+    @@@ java
+
+        @RequestMapping
+        public String search(String text, 
+                             Model model,
+                             RedirectAttributes redirectAttrs){
+
+            // Use Model if not redirecting
+            // E.g. Ajax request
+
+            // Use RedirectAttrs if redirecting
+
+        }
+
+!SLIDE smaller
+# What About This?
+
+    @@@ java
+
+      @RequestMapping("/path")
+      public String save(Foo foo, Errors errors){
+
+
+          // Will the "default" model be used?
+
+          return "redirect:/action";
+
+      }
+
+!SLIDE incremental bullets small
+# `"IgnoreDefaultModelOnRedirect"` Property
+
+* `RequestMappingHandlerAdapter`
+* Effectively disables use of "default" model on redirect
+* Set to `"true"` in MVC namespace & Java config
+
+!SLIDE subsection
+# Flash Attributes
 
 !SLIDE incremental
 # Flash Attributes
 
-* Another kind of redirect attributes
-* But without impact on the URL
-* Temporily stored in the session
-* Removed immediately after the redirect
+* Attrs temporily stored in the session
+* Before a redirect
+* Removed immediately after
 
 !SLIDE smaller
-# Flash Attributes Example
+# Example
 
     @@@ java
 
@@ -115,64 +299,130 @@
       public String save(Entity entity, Errors errors, 
                          RedirectAttributes redirectAttrs){
 
-        if (errors.hasErrors()) {
-          return "edit"; 
-        }
+        // ...
 
-        redirectAttrs.addFlashAttribute("message", "Success!");
 
-        // Attribute "message" will appear in model of
-        // the controller after the redirect
+
+
+
 
         return "redirect:/action";
       }
 
-!SLIDE code
-# Demo 
-
-<a href="https://github.com/SpringSource/spring-mvc-showcase">https://github.com/SpringSource/spring-mvc-showcase</a>
-
-<a href="https://github.com/SpringSource/spring-mvc-showcase/blob/master/src/main/java/org/springframework/samples/mvc/form/FormController.java">__`FormController.java`__</a>
-
-
-!SLIDE incremental
-# Flash Attributes
-
-* Zero configuration required
-* Multi-tiered support
-* Use `RedirectAttributes` within @MVC
-* Or access `FlashMap` directly elsewhere
-
-!SLIDE small
-# Direct Access To FlashMap
+!SLIDE smaller slide=fade
+# Example
 
     @@@ java
 
-    // Some code not in @Controller
-    // Save attributes prior to a redirect..
+      @RequestMapping("/path")
+      public String save(Entity entity, Errors errors, 
+                         RedirectAttributes redirectAttrs){
+
+        // ...
+
+        redirectAttrs.addFlashAttribute("message", "Success!");
+
+
+
+
+        return "redirect:/action";
+      }
+
+!SLIDE smaller slide=fade
+# Example
+
+    @@@ java
+
+      @RequestMapping("/path")
+      public String save(Entity entity, Errors errors, 
+                         RedirectAttributes redirectAttrs){
+
+        // ...
+
+        redirectAttrs.addFlashAttribute("message", "Success!");
+
+        // Attribute "message" will be available 
+        // in model of controller following the redirect
+
+        return "redirect:/action";
+      }
+
+!SLIDE
+# Demo 
+<br>
+<a href="https://github.com/SpringSource/spring-mvc-showcase">https://github.com/SpringSource/spring-mvc-showcase</a>
+<br>
+<a href="https://github.com/SpringSource/spring-mvc-showcase/blob/master/src/main/java/org/springframework/samples/mvc/form/FormController.java">FormController.java</a>
+
+
+!SLIDE incremental
+# Working with Flash Attributes
+
+* Layered support
+* In @MVC use `RedirectAttributes`
+* Elsewhere access `FlashMap` directly
+
+!SLIDE small
+# Example
+## _(Some Code Not In an @Controller)_
+
+    @@@ java
+
+    // Before redirect
 
     FlashMap flashMap = 
       RequestContextUtils.getOutputFlashMap(request);
-        
-    flashMap.put("message", "Success!");
 
 
-!SLIDE incremental
-# Flash Attributes &
-# Concurrency
 
-* A redirect is relatively short lived
-* Another async request may come in
-* E.g. polling, resource request, etc.
-* FlashMap may be consumed too early
 
-!SLIDE incremental
-# Solution: Set Request Info
-# on FlashMap 
+
+
+    // ..
+
+
+!SLIDE small transition=fade
+# Example
+## _(Some Code Not In an @Controller)_
+
+    @@@ java
+
+    // Before redirect
+
+    FlashMap flashMap = 
+      RequestContextUtils.getOutputFlashMap(request);
+
+    // After redirect
+
+    Map<String, String> map = 
+      RequestContextUtils.getOutputFlashMap(request);
+
+    // ..
+
+!SLIDE incremental bullets
+# Concurrency Issues
+
+* Redirects are short lived
+* But another async request may interfere
+* E.g. polling, resource request, ..
+* Flash consumed too early
+
+!SLIDE incremental bullets
+# Target Request Info
+# On `FlashMap` 
 
 * `setTargetRequestPath(String)`
 * `addTargetRequestParam(String,String)`
-* Automatically done when using `"redirect:"` or `RedirectView`
+* `RedirectView` sets these
+
+!SLIDE incremental bullets
+# `FlashMapManager`
+
+* Matches requests to `FlashMap` instances
+* Stores instances in HTTP session
+* Instantiated in `DispatcherServlet`
+* Discovered by name `"flashMapManager"`
+
 
 
 

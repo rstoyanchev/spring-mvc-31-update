@@ -1,82 +1,109 @@
 
-!SLIDE subsection bullets smaller
-# Agenda
+!SLIDE subsection
+# @MVC Infrastructure
 
-* Code-based Config
-* __@MVC Support Classes__
-* Consumes & Produces
-* URI Variables
-* Redirect Scenarios
-* UriComponentsBuilder
-* Multipart Requests
-
-!SLIDE incremental
-# @Controllers
+!SLIDE incremental bullets
+# @MVC
 
 * Introduced in Spring 2.5
-* Expanded for REST in 3.0
+* Expanded for REST in Spring 3.0
+* Overall very successful
+* Does more
+* More flexible, etc.
+
+!SLIDE incremental bullets
+# @MVC Infrastructure
+
+* We're talking about...
+* `DefaultAnnotaionHandlerMapping`
+* `AnnotationMethodHandlerAdapter`
+* `AnnotationMethodHandlerExceptionResolver`
+
+!SLIDE incremental bullets
+# @MVC Infrastructure
+
 * Replaced controller class hierarchy
-* Overall __very__ successful
+* Not as easy to customize
+* _Search JIRA for above class names!_
+* Some legacy quirks
 
-!SLIDE incremental
-# @MVC Support Classes
+.notes No concept of selecting a method (rather than a controller) resulting in duplicated handler method selection, inability to split HTTP methods across controllers, etc.
 
-* Gradually evolved
-* Not very customizable
-* Many a JIRA request for flexibility
-* Hindered by some legacy design
-
-.notes Duplicated handler method selection, can't split HTTP methods across controllers, etc.
-
-!SLIDE incremental
-# New, Spring 3.1
-# @MVC Support Classes
+!SLIDE incremental bullets
+# New @MVC Infrastructure
+## (Spring 3.1)
 
 * `RequestMappingHandlerMapping`
 * `RequestMappingHandlerAdapter`
 * `ExceptionHandlerExceptionResolver`
 
+!SLIDE incremental bullets
+# I.e.
+
+* __`@RequestMapping`__ `HandlerMapping`
+* __`@RequestMapping`__ `HandlerAdapter`
+* __`@ExceptionHandler`__ `ExceptionResolver`
+
+!SLIDE incremental bullets
+# New Abstractions
+
+* `HandlerMethod`
+* `HandlerMethodArgumentResolver`
+* `HandlerMethodReturnValueHandler`
+
+!SLIDE incremental bullets
+# What Is Possible Now
+
+* Select a controller method
+* Customize all argument types
+* And all return values
+
 !SLIDE center
 
 ![support-classes.png](support-classes.png)
-
-!SLIDE incremental
-# @MVC Configuration
-
-* __New__ support classes "on"
-* ... if using MVC namespace, Java config
-* __Old__ support classes still the default
-* ... if not using namespace or Java config
-* ... no support for new features
-
-.notes Use of namespace is by choice and represents the recommended configuration
 
 !SLIDE center
 
 ![resolver-handler-implementations.png](resolver-handler-implementations.png)
 
-!SLIDE incremental
+!SLIDE incremental bullets
 # __HandlerMapping__ Customizations
 
 * Provide custom `RequestCondition`
 * Build `RequestMappingInfo` from
-  * custom annotations
-  * anything (e.g. Groovy DSL)
+* ... custom annotations
+* ... or anything else
 
-!SLIDE incremental
+!SLIDE incremental bullets
 # __HandlerAdapter__ Customizations
 
-* Custom argument & return value types
-* Extend built-in argument resolvers
-* Extend built-in return value handlers
+* Plug custom argument & return values
+* Extend built-in arguments & return values
 * Design your own method signature
 
-!SLIDE code
+!SLIDE incremental bullets
+# Configuration
+
+* __New__ support classes are "on"
+* ... if using MVC namespace, Java config
+* __Old__ support classes are "on"
+* ... with out-of-the-box defaults
+
+.notes Use of namespace is by choice and represents the recommended configuration
+
+!SLIDE incremental bullets
+# That Means...
+
+* With MVC namespace you're automatically using the new classes
+* For explicit config you need to switch to the new classes
+
+!SLIDE
 # Demo 
 
-<a href="https://github.com/rstoyanchev/spring-mvc-31-demo">https://github.com/rstoyanchev/spring-mvc-31-demo</a>
+<a href="https://github.com/rstoyanchev/spring-mvc-31-demo">__https://github.com/rstoyanchev/spring-mvc-31-demo__</a>
 
-
-
+!SLIDE incremental bullets
+* For the Remaining Slides We Assume 
+* New Infrastructure Is In Use!
 
 

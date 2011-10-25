@@ -1,17 +1,18 @@
 !SLIDE subsection
 
-# __Spring MVC 3.1 Update__
-
+# Spring MVC 3.1 Update
+<br><br>
 ## Rossen Stoyanchev
 ### _SpringSource, VMware_
 
+!SLIDE subsection smaller bullets
+# Topics
 
-!SLIDE subsection incremental
+* Java Config
+* @MVC Infrastructure
+* Consumes/Produces
+* URI Vars
+* Redirect & Flash Attributes
+* URI Building
+* Multipart Requests
 
-# About The Speaker #
-
-* Staff Engineer SpringSource, VMware
-* Spring MVC, Spring Web Flow committer
-* Teach and consult, Spring Projects
-* Spring Web course author
-* NYC area

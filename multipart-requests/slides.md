@@ -1,26 +1,17 @@
 
-!SLIDE subsection bullets smaller
-# Agenda
+!SLIDE subsection
+# Multipart Requests
 
-* Code-based Config
-* @MVC Support Classes
-* Consumes & Produces
-* URI Variables
-* Redirect Scenarios
-* UriComponentsBuilder
-* __Multipart Requests__
-
-!SLIDE incremental
-# Servlet 3.0 Multipart 
-# Request Parsing
+!SLIDE incremental bullets
+# Servlet 3.0 Support
 
 * `StandardServletMultipartResolver`
-* Use of above resolver is optional
-* Required only if using `MultipartFile`
-* May use `javax.servlet.http.Part` instead
+* Use of resolver is optional
+* Required only with use of `MultipartFile`
+* Not for `javax.servlet.http.Part` args
 
 !SLIDE incremental smaller
-# Multipart Request Examples
+# `MultipartFile` Example
 
     @@@ java
 
@@ -31,8 +22,13 @@
         InputStream in = file.getInputStream();
 
         // ...
+
 	}
 
+!SLIDE incremental smaller transition=scrollLeft
+# `javax.servlet.http.Part` Example
+
+    @@@ java
 
 	@RequestMapping(method = RequestMethod.POST)
 	public void create(
@@ -41,37 +37,17 @@
         InputStream in = part.getInputStream();
 
         // ...
+
 	}
     
-!SLIDE incremental
+!SLIDE incremental bullets
 # `@RequestPart`
 
-* Like `@RequestBody` but targets the part of a `"multipart/form-data"` request
-* The body of the part is read with an `HttpMessageConverter`
+* Like `@RequestBody` but for the part of a `"multipart/form-data"` request
+* Request part content processed with `HttpMessageConverter`
 
 !SLIDE smaller
-# Request with 
-# __JSON__ Part & __Binary File__ Part
-
-    POST /someUrl
-    Content-Type: multipart/mixed
-     
-    --edt7Tfrdusa7r3lNQc79vXuhIIMlatb7PQg7Vp
-    Content-Disposition: form-data; name="meta-data"
-    Content-Type: application/json; charset=UTF-8
-    Content-Transfer-Encoding: 8bit
-     
-    {
-      "name": "value"
-    }
-    --edt7Tfrdusa7r3lNQc79vXuhIIMlatb7PQg7Vp
-    Content-Disposition: form-data; name="file"; filename="file.properties"
-    Content-Type: text/xml
-    Content-Transfer-Encoding: 8bit
-    ... File Data ...
-
-!SLIDE smaller
-# Example: `@RequestPart`
+# Example
 
     @@@ java
 
@@ -88,12 +64,31 @@
 
     } 
 
-!SLIDE incremental small
+!SLIDE smaller
+# Multipart Request with JSON
+
+    POST /someUrl
+    Content-Type: multipart/mixed
+     
+    --edt7Tfrdusa7r3lNQc79vXuhIIMlatb7PQg7Vp
+    Content-Disposition: json-data; name="meta-data"
+    Content-Type: application/json; charset=UTF-8
+    Content-Transfer-Encoding: 8bit
+     
+    {
+      "name": "value"
+    }
+    --edt7Tfrdusa7r3lNQc79vXuhIIMlatb7PQg7Vp
+    Content-Disposition: form-data; name="file"; filename="file.properties"
+    Content-Type: text/xml
+    Content-Transfer-Encoding: 8bit
+    ... File Data ...
+
+!SLIDE incremental bullets small
 # `@Valid`
 
-* Supported on `@RequestBody` and `@RequestPart` args
-* ... `MethodArgumentNotValidException` on errors
-* Handled by `DefaultHandlerExceptionResolver`
-* ... `SC_BAD_REQUEST` (`400`) response  code
+* Supported on `@RequestBody` & `@RequestPart` args
+* Produces `MethodArgumentNotValidException`
+* Handled in `DefaultHandlerExceptionResolver`.. `SC_BAD_REQUEST` (`400`) response  code
 
 

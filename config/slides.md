@@ -1,62 +1,156 @@
 
-!SLIDE subsection bullets smaller
-# Agenda
+!SLIDE subsection
+# MVC Java Config
 
-* __Code-based Config__
-* @MVC Support Classes
-* Consumes & Produces
-* URI Variables
-* Redirect Scenarios
-* UriComponentsBuilder
-* Multipart Requests
+!SLIDE incremental bullets
+# Spring MVC
+# Configuration Options
 
-!SLIDE incremental
-# The MVC Namespace
+* (1) Out-of-the-box defaults
+* _i.e. empty `<name>-servlet.xml`_
+* (2) MVC Namespace
+* `<mvc:annotation-driven />` and friends
 
-* Introduced in Spring 3.0
-* More opinionated than built-in defaults
-* Aims to simplify typical configuration
+!SLIDE incremental bullets
+# Out-Of-The-Box Defaults
+## (`DispatcherServlet.properties`)
 
-.notes A concise way to register: Interceptors, Converters, Formatters, Resource handling, View controllers, and more...
+* Minimal, neutral, flexible
+* A foundation
+* Can be verbose for common tasks
 
-!SLIDE
-# Example
-
-	@@@ xml
-
-      <mvc:annotation-driven />
-
-      <mvc:interceptors>
-	      <ref bean="log4jInterceptor"/>
-      </mvc:interceptors>
-
-      <mvc:resources mapping="/resources/**" 
-            location="/resources/" />
-
-      <mvc:default-servlet-handler />    
-
-!SLIDE incremental
-# Ease-of-Use vs Control:
+!SLIDE incremental bullets
 # MVC Namespace
-.notes Ask how many people use the namespace? Probably under 50% ...
+## _(Added in Spring 3.0)_
 
-* How do I see actual configuration?
-* How do I change bean property ... ?
-* No transparency
-* No path from simple to advanced
+* More opinionated
+* Targets the 80%
+* A starting point
+* Minimizes boilerplate
+* Transparency, flexibility .. ?
 
-!SLIDE incremental
-# Spring MVC Java Config
+!SLIDE incremental bullets
+# MVC Java Config
 ## (Spring 3.1)
 
-* Code-based alternative to namespace
-* Not a one-for-one "translation"
-* Match the benefits of the namespace
-* Address the shortcomings
+* Designed with this experience in mind
+* Transparency is key in MVC config
+* So is flexibility
+* So is a having simple starting point!
+
+!SLIDE small
+# A Simple Starting Point
+
+	@@@ java
+
+        // Equivalent to <mvc:annotation:driven/>
+
+        @EnableWebMvc
+        @Configuration
+        public class WebConfig {
+
+        }
+
+!SLIDE small
+# A Simple Starting Point
+
+	@@@ java
+
+        // Equivalent to <mvc:annotation:driven/>
+
+        @EnableWebMvc   // <-- What's behind ? 
+        @Configuration
+        public class WebConfig {
+
+        }
+
+!SLIDE small transition=scrollLeft
+# `@EnableWebMvc`
+
+    @@@ java
+
+        @Retention(RetentionPolicy.RUNTIME)
+        @Import(DelegatingWebMvcConfiguration.class)
+        @Target(ElementType.TYPE)
+        public @interface EnableWebMvc {
+
+        }
+
+!SLIDE small transition=fade
+# `@EnableWebMvc`
+
+    @@@ java
+
+
+        @Import(DelegatingWebMvcConfiguration.class)
+
+        public @interface EnableWebMvc {
+
+        }
+
+
+!SLIDE incremental bullets
+# Config Customizations
+
+* Implement <a href="http://static.springsource.org/spring/docs/3.1.0.RC1/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.html">`WebMvcConfigurer`</a>
+* Or extend <a href="http://static.springsource.org/spring/docs/3.1.0.RC1/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurerAdapter.html">`WebMvcConfigurerAdapter`</a>
+* Simple, discoverable config API
+* Matches MVC namespace
 
 !SLIDE smaller
-# Basic MVC Java Config
-# Example
+# Config Customization Example
+
+	@@@ java
+
+    @EnableWebMvc
+    @Configuration
+    public class WebConfig {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+!SLIDE smaller
+# Config Customization Example
+
+	@@@ java
+
+    @EnableWebMvc
+    @Configuration
+    public class WebConfig extends WebMvcConfigurerAdapter {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+!SLIDE smaller
+# Config Customization Example
 
 	@@@ java
 
@@ -65,53 +159,187 @@
     public class WebConfig extends WebMvcConfigurerAdapter {
 
       @Override
-	  public void addFormatters(FormatterRegistry reg){
-          // ...
-	  }
+      protected void addFormatters(FormatterRegistry registry) {
+        // ...
+      }
 
-	  @Override
-	  public void addInterceptors(InterceptorRegistry reg){
-          // Equivalent to <mvc:interceptors>
-	  }
 
-      // Override more base class methods as needed...
+
+
+
+
+
+
+
+
 
     }
 
 !SLIDE smaller
-# Load Java config from web.xml
-
-	@@@ xml
-
-      <!-- Detect @Configuration classes in a package -->
-
-      <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>org.example.somepackage</param-value>
-      </context-param>
-
-      <!-- Use ApplicationContext for Java config -->
-
-      <context-param>
-        <param-name>contextClass</param-name>
-        <param-value>
-            org.springframework.web.context.support.
-              AnnotationConfigWebApplicationContext
-        </param-value>
-      </context-param>
-
-!SLIDE incremental
-# Why MVC Java Config?
-
-* Higher level configuration API
-* Like MVC namespace
-* But much easier to see underlying config
-* A path from simple to advanced
-
-!SLIDE smaller
-# Advanced Customization Example
+# Config Customizations
 
 	@@@ java
+
+    @EnableWebMvc
+    @Configuration
+    public class WebConfig extends WebMvcConfigurerAdapter {
+
+      @Override
+      protected void addFormatters(FormatterRegistry registry) {
+        // ...
+      }
+
+      @Override
+      public void addInterceptors(InterceptorRegistry reg){
+        // Equivalent to <mvc:interceptors>
+      }
+
+
+
+
+
+
+    }
+
+!SLIDE smaller
+# Config Customizations
+
+	@@@ java
+
+    @EnableWebMvc
+    @Configuration
+    public class WebConfig extends WebMvcConfigurerAdapter {
+
+      @Override
+      protected void addFormatters(FormatterRegistry registry) {
+        // ...
+      }
+
+      @Override
+      public void addInterceptors(InterceptorRegistry reg){
+        // Equivalent to <mvc:interceptors>
+      }
+
+      @Override
+      public void addViewControllers(ViewControllerRegistry reg) {
+        // Equivalent to <mvc:view-controller>
+      }
+
+    }
+
+!SLIDE incremental bullets
+# Advanced Customizations
+
+* Remove <a href="http://static.springsource.org/spring/docs/3.1.0.RC1/javadoc-api/org/springframework/web/servlet/config/annotation/EnableWebMvc.html">`@EnableWebMvc`</a>
+* Extend <a href="http://static.springsource.org/spring/docs/3.1.0.RC1/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurationSupport.html">`WebMvcConfigurationSupport`</a>
+* Override the same methods as in `WebMvcConfigurer` 
+* Override `@Bean` methods
+
+!SLIDE smaller
+# Advanced Customizations
+
+	@@@ java
+
+    @EnableWebMvc
+    @Configuration
+    public class WebConfig extends WebMvcConfigurerAdapter {
+
+      @Override
+      public void addInterceptors(InterceptorRegistry reg){
+        // Equivalent to <mvc:interceptors>
+      }
+
+
+
+
+
+
+
+
+      }
+
+    }
+
+!SLIDE smaller
+# Advanced Customizations
+
+	@@@ java
+
+
+    @Configuration
+    public class WebConfig extends WebMvcConfigurerAdapter {
+
+      @Override
+      public void addInterceptors(InterceptorRegistry reg){
+        // Equivalent to <mvc:interceptors>
+      }
+
+
+
+
+
+
+
+
+      }
+
+    }
+
+!SLIDE smaller
+# Advanced Customizations
+
+	@@@ java
+
+
+    @Configuration
+    public class WebConfig extends WebMvcConfigurationSupport {
+
+      @Override
+      public void addInterceptors(InterceptorRegistry reg){
+        // Equivalent to <mvc:interceptors>
+      }
+
+
+
+
+
+
+
+
+      }
+
+    }
+
+!SLIDE smaller
+# Advanced Customizations
+
+	@@@ java
+
+
+    @Configuration
+    public class WebConfig extends WebMvcConfigurationSupport {
+
+      @Override
+      public void addInterceptors(InterceptorRegistry reg){
+        // Equivalent to <mvc:interceptors>
+      }
+
+      @Override
+      @Bean
+      public RequestMappingHandlerAdapter 
+                    requestMappingHandlerAdapter() {
+
+
+
+      }
+
+    }
+
+!SLIDE smaller
+# Advanced Customizations
+
+	@@@ java
+
 
     @Configuration
     public class WebConfig extends WebMvcConfigurationSupport {
@@ -128,29 +356,16 @@
 
           // Create or let "super" create and customize 
           // RequestMappingHandlerAdapter ...
-
       }
+
     }
 
-!SLIDE code
-# Demo 
-
-<a href="https://github.com/SpringSource/greenhouse">__https://github.com/SpringSource/greenhouse__</a><br>
-_See package:_
-<a href="https://github.com/SpringSource/greenhouse/tree/master/src/main/java/com/springsource/greenhouse/config">com.springsource.greenhouse.config</a>
- 
-<a href="https://github.com/rstoyanchev/spring-mvc-31-demo">__https://github.com/rstoyanchev/spring-mvc-31-demo__</a><br>
-_See package:_
-<a href="https://github.com/rstoyanchev/spring-mvc-31-demo/tree/master/src/main/java/org/springframework/samples/mvc31/config">org.springframework.samples.mvc31.config</a>
-
 !SLIDE
-## For more on 
-## __Spring MVC Java Config__
-## attend this session:
-<br><br><br>
-## <a href="http://www.springone2gx.com/conference/chicago/2011/10/session?id=24006">__Configuration Enhancements in Spring 3.1__</a>
-
-Wednesday, 12:45
+## For more on this topic attend:
+<br><br>
+## <a href="http://www.springone2gx.com/conference/chicago/2011/10/session?id=24006">"Configuration Enhancements in Spring 3.1"</a>
+<br>
+Today (Wed) @ 12:45
 
 
 

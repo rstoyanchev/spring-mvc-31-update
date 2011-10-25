@@ -1,18 +1,9 @@
 
-!SLIDE subsection bullets smaller
-# Agenda
-
-* Code-based Config
-* @MVC Support Classes
-* Consumes & Produces
-* __URI Variables__
-* Redirect Scenarios
-* UriComponentsBuilder
-* Multipart Requests
+!SLIDE subsection
+# URI Variables
 
 !SLIDE small
-# URI Variables In
-# Data Binding
+# Data Binding & URI Variables
 
     @@@ java
 
@@ -27,43 +18,13 @@
 
 	}
 
-!SLIDE small
-# URI Variable 
-# To Instantiate Model Attribute
+!SLIDE incremental bullets
+# Path Variables In Views
 
-    @@@ java
-
-      // 1. URI variable name = model attr name
-      // 2. Registered Converter<String, Account>
-
-	  @RequestMapping(value="/{account}", 
-                      method = RequestMethod.PUT)
-
-	  public String update(Account account) {
-
-        // ...
-
-      }
-
-!SLIDE code
-# Demo 
-
-<a href="https://github.com/rstoyanchev/spring-mvc-31-demo">https://github.com/rstoyanchev/spring-mvc-31-demo</a>
-
-__See package:__<br>
-<a href="https://github.com/rstoyanchev/spring-mvc-31-demo/tree/master/src/main/java/org/springframework/samples/mvc31/crudcontroller">`org.springframework.samples.mvc31.crudcontroller`</a>
-
-
-!SLIDE incremental
-# Path Variables
-# In Rendering
-
-* Path variables merged in the model
-* Prior to rendering
-* Individal `View` types can opt out
-  * `MappingJacksonJsonView`
-  * `MarshallingView`
-
+* `@PathVariable` values
+* merged into the model before rendering
+* Individal `View` types _"opt out"_
+* E.g. `MappingJacksonJsonView`, `MarshallingView`
 
 !SLIDE small
 # Example
@@ -71,31 +32,112 @@ __See package:__<br>
     @@@java
 
 
-    @RequestMapping("/develop/apps/edit/{slug}")
-
+    @RequestMapping("/apps/edit/{slug}")
     public String editForm(@PathVariable String slug){
 
-        // No need to add "slug" to the model
-        // It will be merged in the model
+
 
     }
 
-!SLIDE smaller
-# URI Variables 
-# In Redirect Strings 
+!SLIDE small transition=fade
+# Example
 
     @@@java
 
-        @RequestMapping(
-            value="/{group}/{year}/{month}/{slug}/rooms",
-            method=RequestMethod.POST)
 
-        public String createRoom() {
+    @RequestMapping("/apps/edit/{slug}")
+    public String editForm(@PathVariable String slug){
 
-            // No need to add "group"/"year"/.. to the model
-            // Will be available for the redirect string
+        // No need to add "slug" to the model
 
-            return "redirect:/{group}/{year}/{month}/{slug}";
-        }
+    }
+
+!SLIDE incremental bullets
+# `"redirect:"` & URI Vars
+
+* Redirect string treated as URI template
+* Expanded with model values
+* Also with current request URI vars
+* Expanded variables are encoded
+
+!SLIDE small
+# Example
+
+    @@@java
+
+    @RequestMapping(
+        value="/{year}/{month}/{slug}/rooms",
+        method=RequestMethod.POST)
+
+    public String createRoom() {
+
+
+
+
+        return "redirect:/{year}/{month}/{slug}";
+    }
+
+!SLIDE small
+# Example
+
+    @@@java
+
+    @RequestMapping(
+        value="/{year}/{month}/{slug}/rooms",
+        method=RequestMethod.POST)
+
+    public String createRoom() {
+
+        // No need to add "year", "month", & "slug"
+
+
+        return "redirect:/{year}/{month}/{slug}";
+    }
+
+!SLIDE small
+# Example
+
+    @@@java
+
+    @RequestMapping(
+        value="/{year}/{month}/{slug}/rooms",
+        method=RequestMethod.POST)
+
+    public String createRoom() {
+
+        // No need to add "year", "month", & "slug"
+        // They will be available to the view
+
+        return "redirect:/{year}/{month}/{slug}";
+    }
+
+!SLIDE incremental bullets
+# Model Attributes &
+# URI Vars
+
+* A URI variable can be used to instantiate a `@ModelAttribute` argument
+* If the names match and there is a registered `Converter<String, Account>`
+
+!SLIDE small
+# Example
+
+    @@@ java
+
+
+    @RequestMapping(value="/{account}", 
+                    method = RequestMethod.PUT)
+
+    public String update(
+               @ModelAttribute Account account) {
+
+    }
+
+!SLIDE
+# Demo
+<br><br>
+<a href="https://github.com/rstoyanchev/spring-mvc-31-demo">https://github.com/rstoyanchev/spring-mvc-31-demo</a>
+<br><br>
+_CRUD Controller:_
+<a href="https://github.com/rstoyanchev/spring-mvc-31-demo/tree/master/src/main/java/org/springframework/samples/mvc31/crudcontroller">`org.springframework.samples.mvc31.crudcontroller`</a>
 
 
