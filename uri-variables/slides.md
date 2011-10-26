@@ -18,8 +18,8 @@
 
 	}
 
-!SLIDE incremental bullets
-# Path Variables In Views
+!SLIDE incremental bullets small
+# Rendering & Path Variables
 
 * `@PathVariable` values
 * merged into the model before rendering
@@ -55,10 +55,9 @@
 !SLIDE incremental bullets
 # `"redirect:"` & URI Vars
 
-* Redirect string treated as URI template
-* Expanded with model values
-* Also with current request URI vars
-* Expanded variables are encoded
+* URI template redirect string
+* Expanded from model values & current request URI vars
+* Variables are encoded
 
 !SLIDE small
 # Example
@@ -106,29 +105,49 @@
     public String createRoom() {
 
         // No need to add "year", "month", & "slug"
-        // They will be available to the view
+        // They will be used in RedirectView
 
         return "redirect:/{year}/{month}/{slug}";
     }
 
-!SLIDE incremental bullets
-# Model Attributes &
-# URI Vars
+!SLIDE incremental bullets small
+# Model Attributes & URI Vars
 
-* A URI variable can be used to instantiate a `@ModelAttribute` argument
-* If the names match and there is a registered `Converter<String, Account>`
+* A URI variable (or request param) can be used to instantiate a `@ModelAttribute` argument
+* If the model attribute name matches the URI variable (or request param) name
+* And there is a registered `Converter<String, Account>`
 
-!SLIDE small
+!SLIDE
 # Example
 
     @@@ java
 
 
-    @RequestMapping(value="/{account}", 
-                    method = RequestMethod.PUT)
+    @RequestMapping(
+            value="/{account}", 
+            method = RequestMethod.PUT)
 
-    public String update(
-               @ModelAttribute Account account) {
+    public String update(Account account) {
+
+
+
+
+    }
+
+!SLIDE transition=fade
+# Example
+
+    @@@ java
+
+
+    @RequestMapping(
+            value="/{account}", 
+            method = RequestMethod.PUT)
+
+    public String update(Account account) {
+
+        // Account was retrieved from DB 
+        // via Converter<String, Account>
 
     }
 

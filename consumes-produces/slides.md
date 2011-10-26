@@ -3,74 +3,82 @@
 # Consumes/Produces
 
 !SLIDE incremental bullets small transition=fade
-# Consumes
+# Input Media Type
 
     @@@ java
 
     @ResponseBody
-    @RequestMapping(method=RequestMethod.POST)
+    @RequestMapping(
+            method=RequestMethod.POST,
+            header="Content-Type=application/json")
 
     public String save(@RequestBody JavaBean javaBean) {
 
     }
 
 !SLIDE incremental bullets small transition=fade
-# Consumes
+# Input Media Type
 
     @@@ java
 
     @ResponseBody
-    @RequestMapping(method=RequestMethod.POST, 
-                    consumes="application/json")
+    @RequestMapping(
+            method=RequestMethod.POST, 
+            consumes="application/json")
+
     public String save(@RequestBody JavaBean javaBean) {
 
     }
 
 
 !SLIDE incremental bullets
-# Header Condition
+# The Moving Parts
 
 * `headers="Content-Type=text/plain"`
 * is converted to `consumes="text/plain"`
 * Same semantics
-* More expressive
 
 !SLIDE incremental bullets small transition=fade
-# Produces 
+# Output Media Type
 
     @@@ java
 
         @ResponseBody
-        @RequestMapping(method=RequestMethod.GET
+        @RequestMapping(
+            method=RequestMethod.GET
+            header="Accept=application/json")
 
         public JavaBean get() {
 
         }
 
 !SLIDE incremental bullets small transition=fade
-# Produces 
+# Output Media Type
 
     @@@ java
 
         @ResponseBody
-        @RequestMapping(method=RequestMethod.GET, 
-                        produces="application/json") 
+        @RequestMapping(
+            method=RequestMethod.GET, 
+            produces="application/json") 
+
         public JavaBean get() {
 
         }
 
 !SLIDE incremental bullets
-# Header Condition
+# The Moving Parts
 
 * `headers="Accept=text/plain"` 
 * is converted to `produces="text/plain"`
-* Semantics aligned with JAX-RS
+* Refined semantics
+* Aligned with JAX-RS
 
 !SLIDE incremental bullets
-# `Produces` Semantics
+# Semantics
 
-* Used not only for mapping
-* Influences actual content type written
+* `"Produces"` used not only for mapping
+* Affects the actual content type written
 * Accepts more general media type
 
 !SLIDE incremental bullets small
@@ -125,7 +133,7 @@
 
         @RequestMapping 
         public String get(Model model) {
-            // This method wins
+            // This method is chosen
 
         }
 
@@ -145,8 +153,8 @@
 
         @RequestMapping 
         public String get(Model model) {
-            // This method wins
-            // i.e. method matching to '*/*' prefered
+            // This method is chosen
+            // As a match to '*/*'
         }
 
         @ResponseBody
@@ -156,7 +164,7 @@
         }
 
 !SLIDE
-# Demo
+# Code Samples
 <br><br>
 <a href="https://github.com/SpringSource/spring-mvc-showcase">__https://github.com/SpringSource/spring-mvc-showcase__</a>
 <br>

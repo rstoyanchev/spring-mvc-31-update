@@ -9,40 +9,43 @@
 * Expanded for REST in Spring 3.0
 * Overall very successful
 * Does more
-* More flexible, etc.
+* More flexible
 
 !SLIDE incremental bullets
-# @MVC Infrastructure
+# What Is The
+# @MVC Infrastructure?
 
-* We're talking about...
 * `DefaultAnnotaionHandlerMapping`
 * `AnnotationMethodHandlerAdapter`
 * `AnnotationMethodHandlerExceptionResolver`
 
 !SLIDE incremental bullets
-# @MVC Infrastructure
+# About The @MVC Infrastructure
 
 * Replaced controller class hierarchy
-* Not as easy to customize
-* _Search JIRA for above class names!_
+* Not very customizable
 * Some legacy quirks
 
 .notes No concept of selecting a method (rather than a controller) resulting in duplicated handler method selection, inability to split HTTP methods across controllers, etc.
 
 !SLIDE incremental bullets
-# New @MVC Infrastructure
-## (Spring 3.1)
+# The New 
+# @MVC Infrastructure
 
 * `RequestMappingHandlerMapping`
 * `RequestMappingHandlerAdapter`
 * `ExceptionHandlerExceptionResolver`
 
 !SLIDE incremental bullets
-# I.e.
+# Named after..
 
 * __`@RequestMapping`__ `HandlerMapping`
 * __`@RequestMapping`__ `HandlerAdapter`
 * __`@ExceptionHandler`__ `ExceptionResolver`
+
+!SLIDE center
+
+![support-classes.png](support-classes.png)
 
 !SLIDE incremental bullets
 # New Abstractions
@@ -54,48 +57,11 @@
 !SLIDE incremental bullets
 # What Is Possible Now
 
-* Select a controller method
-* Customize all argument types
-* And all return values
-
-!SLIDE center
-
-![support-classes.png](support-classes.png)
-
-!SLIDE center
-
-![resolver-handler-implementations.png](resolver-handler-implementations.png)
-
-!SLIDE incremental bullets
-# __HandlerMapping__ Customizations
-
-* Provide custom `RequestCondition`
-* Build `RequestMappingInfo` from
-* ... custom annotations
-* ... or anything else
-
-!SLIDE incremental bullets
-# __HandlerAdapter__ Customizations
-
-* Plug custom argument & return values
-* Extend built-in arguments & return values
-* Design your own method signature
-
-!SLIDE incremental bullets
-# Configuration
-
-* __New__ support classes are "on"
-* ... if using MVC namespace, Java config
-* __Old__ support classes are "on"
-* ... with out-of-the-box defaults
-
-.notes Use of namespace is by choice and represents the recommended configuration
-
-!SLIDE incremental bullets
-# That Means...
-
-* With MVC namespace you're automatically using the new classes
-* For explicit config you need to switch to the new classes
+* Custom request conditions
+* Build request mappings from any source
+* Inspect controller method in interceptors
+* Customize any argument or return value
+* Design own method signature
 
 !SLIDE
 # Demo 
@@ -103,7 +69,11 @@
 <a href="https://github.com/rstoyanchev/spring-mvc-31-demo">__https://github.com/rstoyanchev/spring-mvc-31-demo__</a>
 
 !SLIDE incremental bullets
-* For the Remaining Slides We Assume 
-* New Infrastructure Is In Use!
+# Configuration
+
+* __New__ infrastructure classes are "on" if using MVC namespace or Java config
+* __Old__ infrastructure classes still available but no new features
+* Remaining slides assume new infrastructure classes
+
 
 

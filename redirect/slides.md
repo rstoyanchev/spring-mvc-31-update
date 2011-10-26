@@ -1,11 +1,11 @@
 
 !SLIDE subsection
-# Redirect Attributes
+# Redirect & Flash Attributes
 
 !SLIDE incremental bullets
-# `"redirect:"` & The Model
+# Redirect URL
 
-* Redirect string can be URI template
+* A redirect string can be URI template
 * Expanded from model attrs
 * Remaining attrs appended to query
 * But only if they're simple type
@@ -27,7 +27,7 @@
 
 
 
-        @RequestMapping("/path")
+        @RequestMapping(method=POST)
         public String save(Model model) {
             // ...
             return "redirect:/action";
@@ -48,7 +48,7 @@
 
         }
 
-        @RequestMapping("/path")
+        @RequestMapping(method=POST)
         public String save(Model model) {
             // ...
             return "redirect:/action";
@@ -69,7 +69,7 @@
             model.addAttribute(..);
         }
 
-        @RequestMapping("/path")
+        @RequestMapping(method=POST)
         public String save(Model model) {
             // ...
             return "redirect:/action";
@@ -90,7 +90,7 @@
             model.addAttribute(..);
         }
 
-        @RequestMapping("/path")
+        @RequestMapping(method=POST)
         public String save(Model model) {
             // ...
             return "redirect:/action";
@@ -102,7 +102,7 @@
 
     @@@ java
 
-    @RequestMapping("/path")
+    @RequestMapping(method=POST)
     public String save(Foo foo, Errors errors, 
                        Model model) {
 
@@ -125,7 +125,7 @@
 
     @@@ java
 
-    @RequestMapping("/path")
+    @RequestMapping(method=POST)
     public String save(Foo foo, Errors errors, 
                        Model model) {
 
@@ -148,7 +148,7 @@
 
     @@@ java
 
-    @RequestMapping("/path")
+    @RequestMapping(method=POST)
     public String save(Foo foo, Errors errors, 
                        Model model) {
 
@@ -172,14 +172,14 @@
 * A new method argument type
 * Used to select attrs for redirect scenario
 * Initially empty
-* Used if controller redirects.. instead of model
+* Used instead of model if controller redirects
 
 !SLIDE smaller
 # Example
 
     @@@ java
 
-        @RequestMapping("/path")
+        @RequestMapping(method=POST)
         public String save(Foo foo, Errors errors, 
                            RedirectAttributes redirectAttrs){
 
@@ -206,7 +206,7 @@
 
     @@@ java
 
-        @RequestMapping("/path")
+        @RequestMapping(method=POST)
         public String save(Foo foo, Errors errors, 
                            RedirectAttributes redirectAttrs){
 
@@ -224,7 +224,7 @@
 
     @@@ java
 
-        @RequestMapping("/path")
+        @RequestMapping(method=POST)
         public String save(Foo foo, Errors errors, 
                            RedirectAttributes redirectAttrs){
 
@@ -258,16 +258,17 @@
 
         }
 
-!SLIDE smaller
+!SLIDE small
 # What About This?
 
     @@@ java
 
-      @RequestMapping("/path")
+      @RequestMapping(method=POST)
       public String save(Foo foo, Errors errors){
 
 
           // Will the "default" model be used?
+          // Or will it be ignored?
 
           return "redirect:/action";
 
@@ -278,10 +279,8 @@
 
 * `RequestMappingHandlerAdapter`
 * Effectively disables use of "default" model on redirect
-* Set to `"true"` in MVC namespace & Java config
-
-!SLIDE subsection
-# Flash Attributes
+* Default value is `"false"` by default
+* MVC namespace & Java config set it to `"true"` 
 
 !SLIDE incremental
 # Flash Attributes
@@ -295,7 +294,7 @@
 
     @@@ java
 
-      @RequestMapping("/path")
+      @RequestMapping(method=POST)
       public String save(Entity entity, Errors errors, 
                          RedirectAttributes redirectAttrs){
 
@@ -314,7 +313,7 @@
 
     @@@ java
 
-      @RequestMapping("/path")
+      @RequestMapping(method=POST)
       public String save(Entity entity, Errors errors, 
                          RedirectAttributes redirectAttrs){
 
@@ -333,7 +332,7 @@
 
     @@@ java
 
-      @RequestMapping("/path")
+      @RequestMapping(method=POST)
       public String save(Entity entity, Errors errors, 
                          RedirectAttributes redirectAttrs){
 
@@ -348,7 +347,7 @@
       }
 
 !SLIDE
-# Demo 
+# Code Samples 
 <br>
 <a href="https://github.com/SpringSource/spring-mvc-showcase">https://github.com/SpringSource/spring-mvc-showcase</a>
 <br>
@@ -360,10 +359,10 @@
 
 * Layered support
 * In @MVC use `RedirectAttributes`
-* Elsewhere access `FlashMap` directly
+* Uses `FlashMap` underneath
 
 !SLIDE small
-# Example
+# Static Access to `FlashMap`
 ## _(Some Code Not In an @Controller)_
 
     @@@ java
@@ -382,7 +381,7 @@
 
 
 !SLIDE small transition=fade
-# Example
+# Static Access to `FlashMap`
 ## _(Some Code Not In an @Controller)_
 
     @@@ java
@@ -395,33 +394,18 @@
     // After redirect
 
     Map<String, String> map = 
-      RequestContextUtils.getOutputFlashMap(request);
+      RequestContextUtils.getInputFlashMap(request);
 
     // ..
 
 !SLIDE incremental bullets
-# Concurrency Issues
+# Pluggable Support
 
-* Redirects are short lived
-* But another async request may interfere
-* E.g. polling, resource request, ..
-* Flash consumed too early
-
-!SLIDE incremental bullets
-# Target Request Info
-# On `FlashMap` 
-
-* `setTargetRequestPath(String)`
-* `addTargetRequestParam(String,String)`
-* `RedirectView` sets these
-
-!SLIDE incremental bullets
-# `FlashMapManager`
-
+* `FlashMapManager`
+* Discovered by `DispatcherServlet`
 * Matches requests to `FlashMap` instances
 * Stores instances in HTTP session
-* Instantiated in `DispatcherServlet`
-* Discovered by name `"flashMapManager"`
+
 
 
 

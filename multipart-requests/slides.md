@@ -57,8 +57,8 @@
         consumes = { "multipart/form-data" })
 
     public ResponseEntity<Object> void create(
-            @RequestPart("json-data") @Valid JavaBean javaBean, 
-            @RequestPart("file-data") MultipartFile file) {
+        @RequestPart("json-data") @Valid JavaBean javaBean, 
+        @RequestPart("file-data") MultipartFile file) {
  
        // ...
 

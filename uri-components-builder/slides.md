@@ -7,16 +7,16 @@
 
 * `UriTemplate`
 * Encoding limitations
-* Not very flexible
-* Nor re-usable
+* Flexible enough .. ?
+* Re-usable enough .. ?
 
 .notes SPR-8662, SPR-8403, path segments & query params cannot be encoded fully
 
 !SLIDE incremental bullets
 # `UriComponents`
 
-* Immutable container of URI components
-* Provides getters
+* Immutable container of URI's components
+* Provides access to components
 * Components may contain URI vars
 * Expand/encode operations
 
@@ -27,35 +27,35 @@
 * `UriComponentsBuilder.fromUriString(String)`
 * Plus chained builder-style methods
 
-!SLIDE small
+!SLIDE
 # Example
 
     @@@ java
 
 
 
-        UriComponents uriComponents = 
-	        UriComponentsBuilder.fromPath("{path}")
-		        .queryParam("id", 123)
-                .fragment("a")
-                .build()
-                .expand("/some path")
-                .encode();
+    UriComponents uriComponents = 
+      UriComponentsBuilder.fromPath("{path}")
+        .queryParam("id", 123)
+        .fragment("a")
+        .build()
+        .expand("/some path")
+        .encode();
 
-!SLIDE small transition=fade
+!SLIDE transition=fade
 # Example
 
     @@@ java
-        // Full control over every step
-        // vs all in one shot
+    // Full control over every step
+    // vs all in one shot
 
-        UriComponents uriComponents = 
-	        UriComponentsBuilder.fromPath("{path}")
-		        .queryParam("id", 123)
-                .fragment("a")
-                .build()
-                .expand("/some path")
-                .encode();
+    UriComponents uriComponents = 
+      UriComponentsBuilder.fromPath("{path}")
+        .queryParam("id", 123)
+        .fragment("a")
+        .build()
+        .expand("/some path")
+        .encode();
 
 !SLIDE incremental bullets
 # `UriTemplate & UriUtils` ?
@@ -64,7 +64,7 @@
 * Both use `UriComponents` internally
 
 !SLIDE incremental bullets
-# Redirect URL & `UriComponentsBuilder`
+# `UriComponents` For Redirect
 
 * An alternative to using `"redirect:"`
 * Max control over redirect URL
