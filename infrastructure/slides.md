@@ -15,7 +15,7 @@
 # What Is The
 # @MVC Infrastructure?
 
-* `DefaultAnnotaionHandlerMapping`
+* `DefaultAnnotationHandlerMapping`
 * `AnnotationMethodHandlerAdapter`
 * `AnnotationMethodHandlerExceptionResolver`
 
